@@ -3,6 +3,7 @@ source https://nuget.org/api/v2
 #Open packages
 
 nuget FSharp.Formatting
+nuget FSharp.Compiler.Service
 nuget FsCheck
 nuget FsCheck.Xunit
 nuget xunit.runner.console
