@@ -8,6 +8,7 @@ nuget FsCheck
 nuget FsCheck.Xunit
 nuget xunit.runner.console
 nuget xunit.assert
+nuget xunit
 nuget FAKE
 nuget Mono.Cecil >= 0.10.0-beta1
 nuget GtkSharp

@@ -721,17 +721,20 @@ NUGET
       System.Text.Encoding (>= 4.3) - framework: dnxcore50, >= netstandard13
       System.Threading (>= 4.3) - framework: dnxcore50, >= netstandard13
       System.Xml.ReaderWriter (>= 4.3) - framework: dnxcore50, netstandard10, >= netstandard13
+    xunit (2.2)
+      xunit.assert (2.2)
+      xunit.core (2.2)
     xunit.abstractions (2.0.1) - framework: >= net452, >= netstandard11
       NETStandard.Library (>= 1.6) - framework: >= netstandard10
     xunit.assert (2.2)
       NETStandard.Library (>= 1.6) - framework: >= netstandard11
-    xunit.core (2.2) - framework: >= netstandard16
+    xunit.core (2.2)
       xunit.extensibility.core (2.2)
       xunit.extensibility.execution (2.2)
-    xunit.extensibility.core (2.2) - framework: >= net452, >= netstandard11
+    xunit.extensibility.core (2.2)
       NETStandard.Library (>= 1.6) - framework: >= netstandard11
       xunit.abstractions (>= 2.0.1) - framework: >= net452, >= netstandard11
-    xunit.extensibility.execution (2.2) - framework: >= net10, >= netstandard10
+    xunit.extensibility.execution (2.2)
       NETStandard.Library (>= 1.6) - framework: >= netstandard11
       xunit.extensibility.core (2.2) - framework: >= net452, >= netstandard11
     xunit.runner.console (2.2)
