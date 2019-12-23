@@ -75,6 +75,36 @@ namespace OpenTK
             : this(mode, 1, 0, GraphicsContextFlags.Default)
         { }
 
+
+        /// <summary>
+        /// Constructs a new instance with the specified external graphics context.
+        /// This is useful if you want to share OpenGL objects between controls.
+        /// </summary>
+        /// <param name="context"></param>
+        public GLControl(IGraphicsContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            if (context.IsDisposed) {
+                throw new ArgumentException("The provided context is already disposed!", nameof(context));
+            }
+            // presumably toolkit is already initialized, but it can't hurt to call it again.
+            // TODO: Provide values for these from the context instead of manual parameters.
+            _format = _context.GraphicsMode;
+            _major = 0;
+            _minor = 0;
+            _flags = 0;
+            
+
+            // Note: the DesignMode property may be incorrect when nesting controls.
+            // We use LicenseManager.UsageMode as a workaround (this only works in
+            // the constructor).
+            _designMode =
+                DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+            ConfigureAndInit();
+            
+        }
+
         /// <summary>
         /// Constructs a new instance with the specified GraphicsMode.
         /// </summary>
@@ -84,11 +114,22 @@ namespace OpenTK
         /// <param name="flags">The GraphicsContextFlags for the OpenGL GraphicsContext.</param>
         public GLControl(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
         {
-            if (mode == null)
-            {
-                throw new ArgumentNullException(nameof(mode));
-            }
+            _format = mode ?? throw new ArgumentNullException(nameof(mode));
+            _major = major;
+            _minor = minor;
+            _flags = flags;
+            
+            // Note: the DesignMode property may be incorrect when nesting controls.
+            // We use LicenseManager.UsageMode as a workaround (this only works in
+            // the constructor).
+            _designMode =
+                DesignMode ||
+                LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
+            ConfigureAndInit();
+        }
+
+        private void ConfigureAndInit() {
             // SDL does not currently support embedding
             // on external windows. If Open.Toolkit is not yet
             // initialized, we'll try to request a native backend
@@ -96,8 +137,7 @@ namespace OpenTK
             // Most people are using GLControl through the
             // WinForms designer in Visual Studio. This approach
             // works perfectly in that case.
-            Toolkit.Init(new ToolkitOptions
-            {
+            Toolkit.Init(new ToolkitOptions {
                 Backend = PlatformBackend.PreferNative
             });
 
@@ -106,17 +146,6 @@ namespace OpenTK
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             DoubleBuffered = false;
 
-            _format = mode;
-            _major = major;
-            _minor = minor;
-            _flags = flags;
-
-            // Note: the DesignMode property may be incorrect when nesting controls.
-            // We use LicenseManager.UsageMode as a workaround (this only works in
-            // the constructor).
-            _designMode =
-                DesignMode ||
-                LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 
             InitializeComponent();
         }
@@ -390,7 +419,6 @@ namespace OpenTK
         /// is current before performing any OpenGL operations.
         /// <seealso cref="MakeCurrent"/>
         /// </summary>
-        [Browsable(false)]
         public IGraphicsContext Context
         {
             get
